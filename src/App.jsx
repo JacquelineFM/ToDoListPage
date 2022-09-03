@@ -53,7 +53,7 @@ const App = () => {
         <Header />
         <div className="flex flex-col md:flex-row mb-8 md:mb-1 sm:mb-8 justify-between w-full space-y-3">
           <FormTask addNewTask={addNewTask} setError={setError} />
-          <RefreshButton styles="py-2 px-4 text-base" />
+          <RefreshButton styles="flex-shrink-0 py-2 px-4 text-base font-semibold text-white bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-indigo-200" />
         </div>
         <ToDoList tasks={tasks} />
       </div>
