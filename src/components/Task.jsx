@@ -4,13 +4,13 @@ const Task = ({ task }) => {
   return (
     <tr className={`${!completed ? "bg-gray-100" : "bg-white"}`}>
       <td className="px-5 py-5 border border-gray-200 text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">{id}</p>
+        {id && <p className="text-gray-900 whitespace-no-wrap">{id}</p>}
       </td>
       <td className="px-5 py-5 border border-gray-200 text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">{userId}</p>
+        {userId && <p className="text-gray-900 whitespace-no-wrap">{userId}</p>}
       </td>
       <td className="px-5 py-5 border border-gray-200 text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">{title}</p>
+        {title && <p className="text-gray-900 whitespace-no-wrap">{title}</p>}
       </td>
       <td className="px-5 py-5 border border-gray-200 text-sm">
         {completed ? (

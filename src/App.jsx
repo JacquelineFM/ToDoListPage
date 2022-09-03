@@ -1,28 +1,24 @@
 import { useState, useEffect } from "react";
+import Error from "./components/Error";
 import Spinner from "./components/Spinner";
 import Header from "./components/Header";
 import FormTask from "./components/FormTask";
+import RefreshButton from "./components/RefreshButton";
 import ToDoList from "./components/ToDoList";
-import Pagination from "./components/Pagination";
 
 const App = () => {
-  const [itemsPerPage] = useState(10);
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const idxLastItem = currentPage * itemsPerPage;
-  const idxFirstItem = idxLastItem - itemsPerPage;
-  const pages = Math.round(tasks.length / itemsPerPage);
-  const currentTasks = tasks.slice(idxFirstItem, idxLastItem);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then((res) => res.json())
       .then(
         (allTasks) => {
-          setIsLoaded(true);
+          setTimeout(() => {
+            setIsLoaded(true);
+          }, 1000);
           setTasks(allTasks);
         },
         (error) => {
@@ -32,25 +28,34 @@ const App = () => {
       );
   }, []);
 
+  /**
+   * It takes a userId and a title as arguments, creates a new task object, and adds it to the
+   * beginning of the tasks array
+   */
+  const addNewTask = (userId, title) => {
+    const newTask = {
+      id: tasks.length + 1,
+      userId,
+      title,
+      completed: false,
+    };
+
+    setTasks([newTask, ...tasks]);
+  };
+
   return error ? (
-    <div>Error: {error.message}</div>
+    <Error />
   ) : !isLoaded ? (
     <Spinner />
   ) : (
-    <div className="container mx-auto px-4 sm:px-8 ">
+    <div className="container mx-auto px-4 sm:px-8 max-w-7xl">
       <div className="py-8">
         <Header />
-        <FormTask />
-        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-            <ToDoList tasks={currentTasks} />
-            <Pagination
-              pages={pages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          </div>
+        <div className="flex flex-col md:flex-row mb-8 md:mb-1 sm:mb-8 justify-between w-full space-y-3">
+          <FormTask addNewTask={addNewTask} setError={setError} />
+          <RefreshButton styles="py-2 px-4 text-base" />
         </div>
+        <ToDoList tasks={tasks} />
       </div>
     </div>
   );
